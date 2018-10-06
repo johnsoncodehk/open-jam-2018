@@ -580,10 +580,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 13d2c061-a3e0-409e-b344-9d8533c4f2ca
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: Open Jam 2018
+  organizationId: johnsoncodehk
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
