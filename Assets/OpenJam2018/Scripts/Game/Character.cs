@@ -8,12 +8,16 @@ namespace OpenJam2018
     public class Character : NetworkBehaviour
     {
 
+        public static List<Character> playerTeam = new List<Character>();
+        public static List<Character> enemyTeam = new List<Character>();
+
         [SyncVar] public bool faceLeft;
 
         public Vector3 moveRaw;
         public float moveSpeed = 1;
         public float hitForce = 1;
         public Color hurtColor;
+        public float hitDelay;
 
         Rigidbody m_Rigidbody;
         CharacterController m_Controller;
@@ -50,6 +54,7 @@ namespace OpenJam2018
             }
             m_Impact = Vector3.Lerp(m_Impact, Vector3.zero, 5 * Time.deltaTime);
 
+            hitDelay = Mathf.Max(0, hitDelay - Time.deltaTime);
         }
         void FixedUpdate()
         {
@@ -64,12 +69,22 @@ namespace OpenJam2018
             if (other.gameObject.layer == LayerMask.NameToLayer("Hitbox"))
             {
                 Character otherCharacter = other.GetComponentInParent<Character>();
-                if (otherCharacter.faceLeft != faceLeft)
+                if (otherCharacter.faceLeft != faceLeft && otherCharacter.hitDelay == 0)
                 {
+                    // otherCharacter.hitDelay = 4f / 24;
                     AddImpact(otherCharacter.faceLeft ? Vector3.left : Vector3.right, hitForce);
                 }
             }
         }
+        void OnDestroy()
+        {
+            if (faceLeft)
+                enemyTeam.Remove(this);
+            else
+                playerTeam.Remove(this);
+        }
+
+
         void AddImpact(Vector3 dir, float force)
         {
             dir.Normalize();
@@ -77,11 +92,76 @@ namespace OpenJam2018
             m_Impact += dir.normalized * force / m_Rigidbody.mass;
             m_Impact0 = m_Impact;
         }
+        IEnumerator StartEnemyAI()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(Random.Range(0.05f, 0.2f));
+
+                var (target, distance) = FindNearPlayer();
+
+                if (!target)
+                    continue;
+
+                if (!MoveToTarget(target))
+                    continue;
+
+                CmdAttack();
+            }
+        }
+        (Character, float) FindNearPlayer()
+        {
+            if (playerTeam.Count == 0)
+                return (null, 0);
+
+            Character nearC = playerTeam[0];
+            float nearD = Vector3.Distance(transform.position, nearC.transform.position + new Vector3(0.5f, 0, 0));
+            for (int i = 1; i < playerTeam.Count; i++)
+            {
+                Character c = playerTeam[i];
+                float d = Vector3.Distance(transform.position, c.transform.position + new Vector3(0.5f, 0, 0));
+                if (d < nearD)
+                {
+                    nearC = c;
+                    nearD = d;
+                }
+            }
+            return (nearC, nearD);
+        }
+        bool MoveToTarget(Character target)
+        {
+            Vector3 d = (target.transform.position + new Vector3(0.5f, 0, 0)) - transform.position;
+            bool moving = Mathf.Abs(d.x) > 0.5f || Mathf.Abs(d.z) > 0.25f;
+
+            if (d.x > 0.5) CmdSetMoveRawX(1);
+            else if (d.x < -0.5) CmdSetMoveRawX(-1);
+            else CmdSetMoveRawX(0);
+
+            if (Mathf.Abs(d.x) < 2 || Mathf.Abs(d.z / d.x) < 1.2f)
+            {
+                if (d.z > 0.25) CmdSetMoveRawZ(1);
+                else if (d.z < -0.25) CmdSetMoveRawZ(-1);
+                else CmdSetMoveRawZ(0);
+            }
+            else CmdSetMoveRawZ(0);
+
+            return !moving;
+        }
 
         public override void OnStartClient()
         {
             if (faceLeft)
                 transform.localEulerAngles = new Vector3(0, 180, 0);
+
+            if (faceLeft)
+                enemyTeam.Add(this);
+            else
+                playerTeam.Add(this);
+        }
+        public override void OnStartServer()
+        {
+            if (faceLeft)
+                StartCoroutine(StartEnemyAI());
         }
 
         [Command]
