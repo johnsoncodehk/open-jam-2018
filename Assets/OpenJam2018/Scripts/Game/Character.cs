@@ -8,49 +8,128 @@ namespace OpenJam2018
     public class Character : NetworkBehaviour
     {
 
-        public float moveRaw = 0;
-        public float moveSpeed = 10;
+        [SyncVar] public bool faceLeft;
 
-        CharacterController2D m_Controller;
+        public Vector3 moveRaw;
+        public float moveSpeed = 1;
+        public float hitForce = 1;
+        public Color hurtColor;
+
+        Rigidbody m_Rigidbody;
+        CharacterController m_Controller;
         Animator m_Animator;
+        bool m_SyncPosition;
+        Vector3 m_Impact, m_Impact0;
+        Material m_Material;
 
         void Awake()
         {
-            m_Controller = GetComponent<CharacterController2D>();
+            m_Rigidbody = GetComponent<Rigidbody>();
+            m_Controller = GetComponent<CharacterController>();
             m_Animator = GetComponent<Animator>();
-        }
-        void FixedUpdate()
-        {
-            m_Controller.Move(moveRaw * moveSpeed * Time.fixedDeltaTime, false, false);
+            m_Material = GetComponentInChildren<SpriteRenderer>().material;
+            m_Material = Instantiate(m_Material);
+            foreach (SpriteRenderer sprite in GetComponentsInChildren<SpriteRenderer>())
+                sprite.material = m_Material;
         }
         void Update()
         {
-            m_Animator.SetFloat("Move Raw", moveRaw);
+            m_Animator.SetFloat("Move Raw X", moveRaw.x * (faceLeft ? -1 : 1));
+            m_Animator.SetFloat("Move Raw Z", moveRaw.z);
+
+            m_Controller.SimpleMove(moveRaw * moveSpeed);
+
+            if (m_Impact.magnitude > 0.2)
+            {
+                m_Controller.Move(m_Impact * Time.deltaTime);
+                m_Material.color = Color.Lerp(Color.white, hurtColor, m_Impact.magnitude / m_Impact0.magnitude);
+            }
+            else
+            {
+                m_Material.color = Color.white;
+            }
+            m_Impact = Vector3.Lerp(m_Impact, Vector3.zero, 5 * Time.deltaTime);
+
+        }
+        void FixedUpdate()
+        {
+            if (m_SyncPosition)
+            {
+                m_SyncPosition = false;
+                RpcSyncPosition(transform.position);
+            }
+        }
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.layer == LayerMask.NameToLayer("Hitbox"))
+            {
+                Character otherCharacter = other.GetComponentInParent<Character>();
+                if (otherCharacter.faceLeft != faceLeft)
+                {
+                    AddImpact(otherCharacter.faceLeft ? Vector3.left : Vector3.right, hitForce);
+                }
+            }
+        }
+        void AddImpact(Vector3 dir, float force)
+        {
+            dir.Normalize();
+            if (dir.y < 0) dir.y = -dir.y;
+            m_Impact += dir.normalized * force / m_Rigidbody.mass;
+            m_Impact0 = m_Impact;
+        }
+
+        public override void OnStartClient()
+        {
+            if (faceLeft)
+                transform.localEulerAngles = new Vector3(0, 180, 0);
         }
 
         [Command]
-        public void CmdSetMoveRaw(float raw) {
-            RpcSetMoveRaw(raw);
+        public void CmdSetMoveRawX(float raw)
+        {
+            m_SyncPosition = true;
+            RpcSetMoveRawX(raw);
         }
         [Command]
-        public void CmdAttack() {
+        public void CmdSetMoveRawZ(float raw)
+        {
+            m_SyncPosition = true;
+            RpcSetMoveRawZ(raw);
+        }
+        [Command]
+        public void CmdAttack()
+        {
             RpcAttack();
         }
         [Command]
-        public void CmdLookAt(Vector2 position) {
+        public void CmdLookAt(Vector2 position)
+        {
             RpcLookAt(position);
         }
 
         [ClientRpc]
-        public void RpcSetMoveRaw(float raw) {
-            moveRaw = raw;
+        public void RpcSyncPosition(Vector3 position)
+        {
+            transform.position = position;
         }
         [ClientRpc]
-        public void RpcAttack() {
+        public void RpcSetMoveRawX(float raw)
+        {
+            moveRaw.x = raw;
+        }
+        [ClientRpc]
+        public void RpcSetMoveRawZ(float raw)
+        {
+            moveRaw.z = raw;
+        }
+        [ClientRpc]
+        public void RpcAttack()
+        {
             Attack();
         }
         [ClientRpc]
-        public void RpcLookAt(Vector2 position) {
+        public void RpcLookAt(Vector2 position)
+        {
             LookAt(position);
         }
 

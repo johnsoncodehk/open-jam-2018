@@ -34,9 +34,14 @@ namespace OpenJam2018
             if (m_Character)
             {
                 if (Input.GetButtonDown("Horizontal") || Input.GetButtonUp("Horizontal"))
-                    m_Character.CmdSetMoveRaw(Input.GetAxisRaw("Horizontal"));
+                    m_Character.CmdSetMoveRawX(Input.GetAxisRaw("Horizontal"));
+
+                if (Input.GetButtonDown("Vertical") || Input.GetButtonUp("Vertical"))
+                    m_Character.CmdSetMoveRawZ(Input.GetAxisRaw("Vertical"));
+
                 if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
                     m_Character.CmdLookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
                 if (Input.GetButtonDown("Fire1"))
                     m_Character.CmdAttack();
             }
