@@ -14,10 +14,13 @@ namespace OpenJam2018
         [SyncVar, HideInInspector] public GameTeam team;
         public int raw => team == GameTeam.Player ? 1 : -1;
 
+        [SyncVar] public int hp = 1;
+        public int atk = 1;
         public Vector3 moveRaw;
         public float moveSpeed = 1;
         public float hitForce = 1;
         public Color hurtColor;
+        public GameObject ghost;
 
         Rigidbody m_Rigidbody;
         CharacterController m_Controller;
@@ -25,6 +28,7 @@ namespace OpenJam2018
         bool m_SyncPosition;
         Vector3 m_Impact, m_Impact0;
         Material m_Material;
+        Vector3 m_LastPosition;
 
         void Awake()
         {
@@ -56,6 +60,7 @@ namespace OpenJam2018
         }
         void FixedUpdate()
         {
+            m_LastPosition = transform.position;
             if (m_SyncPosition)
             {
                 m_SyncPosition = false;
@@ -70,7 +75,7 @@ namespace OpenJam2018
                 if (character)
                 {
                     if (character.team != team)
-                        OnHit();
+                        OnHit(character.atk);
                 }
             }
         }
@@ -80,6 +85,8 @@ namespace OpenJam2018
                 enemyTeam.Remove(this);
             else
                 playerTeam.Remove(this);
+
+            Instantiate(ghost, m_LastPosition, Quaternion.identity);
         }
 
         void AddImpact(Vector3 dir, float force)
@@ -97,8 +104,11 @@ namespace OpenJam2018
 
                 var (target, distance) = FindNearPlayer();
 
-                if (!target)
+                if (!target) {
+                    TrySetMoveRawX(0);
+                    TrySetMoveRawZ(0);
                     continue;
+                }
 
                 if (!MoveToTarget(target))
                     continue;
@@ -134,7 +144,7 @@ namespace OpenJam2018
             else if (d.x < -0.5) TrySetMoveRawX(-1);
             else TrySetMoveRawX(0);
 
-            if (Mathf.Abs(d.x) < 2 || Mathf.Abs(d.z / d.x) < 1.2f)
+            if (Mathf.Abs(d.x) < 2 || Mathf.Abs(d.x / d.z) < 1.2f)
             {
                 if (d.z > 0.25) TrySetMoveRawZ(1);
                 else if (d.z < -0.25) TrySetMoveRawZ(-1);
@@ -161,9 +171,12 @@ namespace OpenJam2018
                 StartCoroutine(StartEnemyAI());
         }
 
-        public void OnHit()
+        public void OnHit(int atk)
         {
             AddImpact(team == GameTeam.Enemy ? Vector3.right : Vector3.left, hitForce);
+            hp -= atk;
+            if (hp <= 0)
+                NetworkServer.Destroy(gameObject);
         }
         public void TrySetMoveRawX(float raw)
         {
