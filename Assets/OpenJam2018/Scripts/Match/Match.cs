@@ -13,16 +13,10 @@ namespace OpenJam2018
         public GameObject searchingGame, noGameFound, creatingGame, gameCreated, gameCreateFailed, gameFound, joiningGame, gameJoinFailed, gameJoined;
         public Text gameInfo;
 
-        NetworkManager m_NetworkManager;
         MatchInfoSnapshot m_MatchInfoSnapshot;
 
-        void Awake()
-        {
-            m_NetworkManager = FindObjectOfType<NetworkManager>();
-        }
         void Start()
         {
-            m_NetworkManager.StartMatchMaker();
             SearchGame();
         }
 
@@ -30,7 +24,8 @@ namespace OpenJam2018
         {
             ShowState(searchingGame);
 
-            m_NetworkManager.matchMaker.ListMatches(0, 1, "", true, 0, 0, (bool success, string extendedInfo, List<MatchInfoSnapshot> matches) =>
+            NetworkManagerHandler.instance.StartMatchMaker();
+            NetworkManagerHandler.instance.matchMaker.ListMatches(0, 1, "", true, 0, 0, (bool success, string extendedInfo, List<MatchInfoSnapshot> matches) =>
             {
                 if (matches.Count == 0)
                 {
@@ -52,7 +47,8 @@ namespace OpenJam2018
         {
             ShowState(creatingGame);
 
-            m_NetworkManager.matchMaker.CreateMatch(name, 20, true, "", "", "", 0, 0, (bool success, string extendedInfo, MatchInfo matchInfo) =>
+            NetworkManagerHandler.instance.StartMatchMaker();
+            NetworkManagerHandler.instance.matchMaker.CreateMatch(name, 20, true, "", "", "", 0, 0, (bool success, string extendedInfo, MatchInfo matchInfo) =>
             {
                 if (!success)
                 {
@@ -60,14 +56,15 @@ namespace OpenJam2018
                     return;
                 }
                 ShowState(gameCreated);
-                m_NetworkManager.StartHost(matchInfo);
+                NetworkManagerHandler.instance.StartHost(matchInfo);
             });
         }
         public void JoinGame()
         {
             ShowState(joiningGame);
 
-            m_NetworkManager.matchMaker.JoinMatch(m_MatchInfoSnapshot.networkId, "", "", "", 0, 0, (bool success, string extendedInfo, MatchInfo matchInfo) =>
+            NetworkManagerHandler.instance.StartMatchMaker();
+            NetworkManagerHandler.instance.matchMaker.JoinMatch(m_MatchInfoSnapshot.networkId, "", "", "", 0, 0, (bool success, string extendedInfo, MatchInfo matchInfo) =>
             {
                 if (!success)
                 {
@@ -75,7 +72,7 @@ namespace OpenJam2018
                     return;
                 }
                 ShowState(gameJoined);
-                m_NetworkManager.StartClient(matchInfo);
+                NetworkManagerHandler.instance.StartClient(matchInfo);
             });
         }
 

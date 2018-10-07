@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace OpenJam2018
 {
-    public class Character : MonoBehaviour
+    public class Character : NetworkBehaviour
     {
 
         public float moveRaw = 0;
