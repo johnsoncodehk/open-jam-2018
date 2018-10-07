@@ -26,7 +26,7 @@ namespace OpenJam2018
             while (!FindObjectOfType<Castle>())
                 yield return new WaitForEndOfFrame();
 
-            GameObject character = Instantiate(NetworkManagerHandler.instance.spawnPrefabs[1], FindObjectOfType<Castle>().RandomPlayerPosition(), Quaternion.identity);
+            GameObject character = Instantiate(NetworkManagerHandler.instance.spawnPrefabs[Random.Range(0, 2)], FindObjectOfType<Castle>().RandomPlayerPosition(), Quaternion.identity);
             NetworkServer.SpawnWithClientAuthority(character.gameObject, connectionToClient);
 
             characterNetId = character.GetComponent<Character>().netId.Value;
