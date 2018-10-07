@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace OpenJam2018
 {
-    public class Castle : NetworkBehaviour
+    public class Game : NetworkBehaviour
     {
 
         public Character archer, swordsman;
