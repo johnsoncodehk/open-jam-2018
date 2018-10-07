@@ -8,23 +8,28 @@ namespace OpenJam2018
     public class Player : NetworkBehaviour
     {
 
-        [SyncVar(hook = "characterNetIdHook")]
+        [SyncVar(hook = "CharacterNetIdHook")]
         public uint characterNetId = NetworkInstanceId.Invalid.Value;
-
-        public Character swordsman, archer;
 
         Character m_Character;
 
         public override void OnStartServer()
         {
-            Character character = Instantiate(archer, FindObjectOfType<Castle>().RandomPlayerPosition(), Quaternion.identity);
-            NetworkServer.SpawnWithClientAuthority(character.gameObject, connectionToClient);
-
-            characterNetId = character.netId.Value;
+            StartCoroutine(WaitGameSceneReady());
         }
         public override void OnStartClient()
         {
             UpdateCharacter();
+        }
+        IEnumerator WaitGameSceneReady()
+        {
+            while (!FindObjectOfType<Castle>())
+                yield return new WaitForEndOfFrame();
+
+            GameObject character = Instantiate(NetworkManagerHandler.instance.spawnPrefabs[1], FindObjectOfType<Castle>().RandomPlayerPosition(), Quaternion.identity);
+            NetworkServer.SpawnWithClientAuthority(character.gameObject, connectionToClient);
+
+            characterNetId = character.GetComponent<Character>().netId.Value;
         }
 
         void Update()
@@ -53,7 +58,7 @@ namespace OpenJam2018
             }
         }
 
-        void characterNetIdHook(uint netId)
+        void CharacterNetIdHook(uint netId)
         {
             characterNetId = netId;
             UpdateCharacter();
