@@ -13,18 +13,24 @@ namespace OpenJam2018
         public Vector3 moveRaw;
         public float moveSpeed = 1;
         public float hitForce = 1;
+        public Color hurtColor;
 
         Rigidbody m_Rigidbody;
         CharacterController m_Controller;
         Animator m_Animator;
         bool m_SyncPosition;
-        Vector3 impact;
+        Vector3 m_Impact, m_Impact0;
+        Material m_Material;
 
         void Awake()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
             m_Controller = GetComponent<CharacterController>();
             m_Animator = GetComponent<Animator>();
+            m_Material = GetComponentInChildren<SpriteRenderer>().material;
+            m_Material = Instantiate(m_Material);
+            foreach (SpriteRenderer sprite in GetComponentsInChildren<SpriteRenderer>())
+                sprite.material = m_Material;
         }
         void Update()
         {
@@ -33,8 +39,17 @@ namespace OpenJam2018
 
             m_Controller.SimpleMove(moveRaw * moveSpeed);
 
-            if (impact.magnitude > 0.2) m_Controller.Move(impact * Time.deltaTime);
-            impact = Vector3.Lerp(impact, Vector3.zero, 5 * Time.deltaTime);
+            if (m_Impact.magnitude > 0.2)
+            {
+                m_Controller.Move(m_Impact * Time.deltaTime);
+                m_Material.color = Color.Lerp(Color.white, hurtColor, m_Impact.magnitude / m_Impact0.magnitude);
+            }
+            else
+            {
+                m_Material.color = Color.white;
+            }
+            m_Impact = Vector3.Lerp(m_Impact, Vector3.zero, 5 * Time.deltaTime);
+
         }
         void FixedUpdate()
         {
@@ -59,7 +74,8 @@ namespace OpenJam2018
         {
             dir.Normalize();
             if (dir.y < 0) dir.y = -dir.y;
-            impact += dir.normalized * force / m_Rigidbody.mass;
+            m_Impact += dir.normalized * force / m_Rigidbody.mass;
+            m_Impact0 = m_Impact;
         }
 
         public override void OnStartClient()

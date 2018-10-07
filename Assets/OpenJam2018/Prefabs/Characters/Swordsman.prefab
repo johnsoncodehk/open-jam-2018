@@ -939,9 +939,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12e8f70efa36e41e4b543522740e9d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isEnemy: 0
+  faceLeft: 0
   moveRaw: {x: 0, y: 0, z: 0}
   moveSpeed: 1
+  hitForce: 1
+  hurtColor: {r: 0.7735849, g: 0.37584552, b: 0.37584552, a: 1}
 --- !u!143 &3476121369070129103
 CharacterController:
   m_ObjectHideFlags: 0

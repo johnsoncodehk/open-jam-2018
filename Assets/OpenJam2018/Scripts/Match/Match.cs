@@ -22,7 +22,7 @@ namespace OpenJam2018
 
         public void LocalHost()
         {
-                NetworkManagerHandler.instance.StartHost();
+            NetworkManagerHandler.instance.StartHost();
         }
         public void SearchGame()
         {
