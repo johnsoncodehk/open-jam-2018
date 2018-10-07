@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/OpenJam2018/Scenes/Game.unity
     guid: 732b88525c075415193a652d358d9c57
+  - enabled: 1
+    path: Assets/OpenJam2018/Scenes/ServerClose.unity
+    guid: da5de719799cd4b0299e27cdaaaff6f4
   m_configObjects: {}

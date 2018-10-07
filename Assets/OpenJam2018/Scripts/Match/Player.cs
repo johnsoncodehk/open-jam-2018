@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace OpenJam2018
 {
-    public class NetworkPlayer : NetworkBehaviour
+    public class Player : NetworkBehaviour
     {
 
         [SyncVar(hook = "characterNetIdHook")]
@@ -33,10 +33,12 @@ namespace OpenJam2018
 
             if (m_Character)
             {
-                m_Character.moveRaw = Input.GetAxisRaw("Horizontal");
-                m_Character.LookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                if (Input.GetButtonDown("Horizontal") || Input.GetButtonUp("Horizontal"))
+                    m_Character.CmdSetMoveRaw(Input.GetAxisRaw("Horizontal"));
+                if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+                    m_Character.CmdLookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                 if (Input.GetButtonDown("Fire1"))
-                    m_Character.Attack();
+                    m_Character.CmdAttack();
             }
         }
 
