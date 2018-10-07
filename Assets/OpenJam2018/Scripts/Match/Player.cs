@@ -12,7 +12,6 @@ namespace OpenJam2018
         public uint characterNetId = NetworkInstanceId.Invalid.Value;
 
         Character m_Character;
-        bool m_SyncPosition;
 
         public override void OnStartServer()
         {
@@ -34,9 +33,6 @@ namespace OpenJam2018
 
             if (m_Character)
             {
-                if (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical"))
-                    m_SyncPosition = true;
-
                 if (Input.GetButtonDown("Horizontal") || Input.GetButtonUp("Horizontal"))
                     m_Character.CmdSetMoveRawX(Input.GetAxisRaw("Horizontal"));
 
@@ -48,14 +44,6 @@ namespace OpenJam2018
 
                 if (Input.GetButtonDown("Fire1"))
                     m_Character.CmdAttack();
-            }
-        }
-        void FixedUpdate()
-        {
-            if (m_SyncPosition)
-            {
-                m_SyncPosition = false;
-                m_Character.CmdSyncPosition();
             }
         }
 
