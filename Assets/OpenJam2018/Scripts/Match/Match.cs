@@ -20,6 +20,10 @@ namespace OpenJam2018
             SearchGame();
         }
 
+        public void LocalHost()
+        {
+                NetworkManagerHandler.instance.StartHost();
+        }
         public void SearchGame()
         {
             ShowState(searchingGame);

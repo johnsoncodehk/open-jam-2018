@@ -8,49 +8,74 @@ namespace OpenJam2018
     public class Character : NetworkBehaviour
     {
 
-        public float moveRaw = 0;
-        public float moveSpeed = 10;
+        public Vector3 moveRaw;
+        public float moveSpeed = 1;
 
-        CharacterController2D m_Controller;
+        CharacterController m_Controller;
         Animator m_Animator;
 
         void Awake()
         {
-            m_Controller = GetComponent<CharacterController2D>();
+            m_Controller = GetComponent<CharacterController>();
             m_Animator = GetComponent<Animator>();
-        }
-        void FixedUpdate()
-        {
-            m_Controller.Move(moveRaw * moveSpeed * Time.fixedDeltaTime, false, false);
         }
         void Update()
         {
-            m_Animator.SetFloat("Move Raw", moveRaw);
+            m_Animator.SetFloat("Move Raw X", moveRaw.x);
+            m_Animator.SetFloat("Move Raw Z", moveRaw.z);
+
+            m_Controller.SimpleMove(moveRaw * moveSpeed);
         }
 
         [Command]
-        public void CmdSetMoveRaw(float raw) {
-            RpcSetMoveRaw(raw);
+        public void CmdSyncPosition()
+        {
+            RpcSyncPosition(transform.position);
         }
         [Command]
-        public void CmdAttack() {
+        public void CmdSetMoveRawX(float raw)
+        {
+            RpcSetMoveRawX(raw);
+        }
+        [Command]
+        public void CmdSetMoveRawZ(float raw)
+        {
+            RpcSetMoveRawZ(raw);
+        }
+        [Command]
+        public void CmdAttack()
+        {
             RpcAttack();
         }
         [Command]
-        public void CmdLookAt(Vector2 position) {
+        public void CmdLookAt(Vector2 position)
+        {
             RpcLookAt(position);
         }
 
         [ClientRpc]
-        public void RpcSetMoveRaw(float raw) {
-            moveRaw = raw;
+        public void RpcSyncPosition(Vector3 position)
+        {
+            transform.position = position;
         }
         [ClientRpc]
-        public void RpcAttack() {
+        public void RpcSetMoveRawX(float raw)
+        {
+            moveRaw.x = raw;
+        }
+        [ClientRpc]
+        public void RpcSetMoveRawZ(float raw)
+        {
+            moveRaw.z = raw;
+        }
+        [ClientRpc]
+        public void RpcAttack()
+        {
             Attack();
         }
         [ClientRpc]
-        public void RpcLookAt(Vector2 position) {
+        public void RpcLookAt(Vector2 position)
+        {
             LookAt(position);
         }
 
