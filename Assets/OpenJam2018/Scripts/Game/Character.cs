@@ -90,7 +90,8 @@ namespace OpenJam2018
             else
                 playerTeam.Remove(this);
 
-            Instantiate(ghost, m_LastPosition, Quaternion.identity);
+            if (NetworkServer.active || NetworkClient.active)
+                Instantiate(ghost, m_LastPosition, Quaternion.identity);
         }
 
         void AddImpact(Vector3 dir, float force)
