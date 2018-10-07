@@ -33,8 +33,7 @@ namespace OpenJam2018
 
                 if (!target)
                 {
-                    TrySetMoveRawX(0);
-                    TrySetMoveRawZ(0);
+                    BackToHome();
                     continue;
                 }
 

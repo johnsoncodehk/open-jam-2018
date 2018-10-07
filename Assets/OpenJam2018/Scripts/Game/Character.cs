@@ -29,7 +29,7 @@ namespace OpenJam2018
         bool m_SyncPosition;
         Vector3 m_Impact, m_Impact0;
         Material m_Material;
-        Vector3 m_LastPosition;
+        Vector3 m_StartPosition, m_LastPosition;
 
         void Awake()
         {
@@ -111,8 +111,7 @@ namespace OpenJam2018
 
                 if (!target)
                 {
-                    TrySetMoveRawX(0);
-                    TrySetMoveRawZ(0);
+                    BackToHome();
                     continue;
                 }
 
@@ -161,9 +160,15 @@ namespace OpenJam2018
 
             return !moving;
         }
+        protected bool BackToHome()
+        {
+            return MoveTo(m_StartPosition);
+        }
 
         public override void OnStartClient()
         {
+            m_StartPosition = transform.position;
+
             if (team == GameTeam.Enemy)
                 transform.localEulerAngles = new Vector3(0, 180, 0);
 
