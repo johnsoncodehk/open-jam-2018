@@ -175,7 +175,7 @@ namespace OpenJam2018
         {
             AddImpact(team == GameTeam.Enemy ? Vector3.right : Vector3.left, hitForce);
             hp -= atk;
-            if (hp <= 0)
+            if (hp <= 0 && isServer)
                 NetworkServer.Destroy(gameObject);
         }
         public void TrySetMoveRawX(float raw)

@@ -12,10 +12,11 @@ namespace OpenJam2018
         public BoxCollider playerSpawnArea;
         public BoxCollider[] groundSpawnAreas = new BoxCollider[0];
         public Transform archerStartPositionMin, archerStartPositionMax;
-        public int archerCount = 5;
-        public int warriorCount = 10;
-        public float archerPerTime = 1;
-        public float warriorPerTime = 1;
+
+        int m_ArcherCount = 5;
+        int m_SwordsmanCount = 10;
+        float m_ArcherPerTime = 1;
+        float m_SwordsmanPerTime = 1;
 
         public override void OnStartServer()
         {
@@ -48,9 +49,9 @@ namespace OpenJam2018
         {
             while (true)
             {
-                yield return new WaitForSeconds(warriorPerTime);
+                yield return new WaitForSeconds(m_SwordsmanPerTime);
 
-                if (Character.enemyTeam.Count > warriorCount)
+                if (Character.enemyTeam.Count > m_SwordsmanCount)
                     continue;
 
                 Character character = Instantiate(swordsman, RandomPosition(groundSpawnAreas), Quaternion.identity);
