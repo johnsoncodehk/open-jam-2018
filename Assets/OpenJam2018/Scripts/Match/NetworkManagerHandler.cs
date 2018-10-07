@@ -21,7 +21,7 @@ namespace OpenJam2018
                 StopHost();
             if (NetworkClient.active)
                 StopClient();
-                
+
             StopMatchMaker();
         }
 
@@ -40,6 +40,7 @@ namespace OpenJam2018
         public override void OnServerDisconnect(NetworkConnection conn)
         {
             Debug.Log("OnServerDisconnect: " + conn);
+            NetworkServer.DestroyPlayersForConnection(conn);
         }
 
         public static GameObject FindLocalObject(NetworkInstanceId netId)
