@@ -11,13 +11,13 @@ namespace OpenJam2018
         public static List<Character> playerTeam = new List<Character>();
         public static List<Character> enemyTeam = new List<Character>();
 
-        [SyncVar] public bool faceLeft;
+        [SyncVar, HideInInspector] public GameTeam team;
+        public int raw => team == GameTeam.Player ? 1 : -1;
 
         public Vector3 moveRaw;
         public float moveSpeed = 1;
         public float hitForce = 1;
         public Color hurtColor;
-        public float hitDelay;
 
         Rigidbody m_Rigidbody;
         CharacterController m_Controller;
@@ -38,7 +38,7 @@ namespace OpenJam2018
         }
         void Update()
         {
-            m_Animator.SetFloat("Move Raw X", moveRaw.x * (faceLeft ? -1 : 1));
+            m_Animator.SetFloat("Move Raw X", moveRaw.x * raw);
             m_Animator.SetFloat("Move Raw Z", moveRaw.z);
 
             m_Controller.SimpleMove(moveRaw * moveSpeed);
@@ -53,8 +53,6 @@ namespace OpenJam2018
                 m_Material.color = Color.white;
             }
             m_Impact = Vector3.Lerp(m_Impact, Vector3.zero, 5 * Time.deltaTime);
-
-            hitDelay = Mathf.Max(0, hitDelay - Time.deltaTime);
         }
         void FixedUpdate()
         {
@@ -68,22 +66,21 @@ namespace OpenJam2018
         {
             if (other.gameObject.layer == LayerMask.NameToLayer("Hitbox"))
             {
-                Character otherCharacter = other.GetComponentInParent<Character>();
-                if (otherCharacter.faceLeft != faceLeft && otherCharacter.hitDelay == 0)
+                Character character = other.GetComponentInParent<Character>();
+                if (character)
                 {
-                    // otherCharacter.hitDelay = 4f / 24;
-                    AddImpact(otherCharacter.faceLeft ? Vector3.left : Vector3.right, hitForce);
+                    if (character.team != team)
+                        OnHit();
                 }
             }
         }
         void OnDestroy()
         {
-            if (faceLeft)
+            if (team == GameTeam.Enemy)
                 enemyTeam.Remove(this);
             else
                 playerTeam.Remove(this);
         }
-
 
         void AddImpact(Vector3 dir, float force)
         {
@@ -133,35 +130,52 @@ namespace OpenJam2018
             Vector3 d = (target.transform.position + new Vector3(0.5f, 0, 0)) - transform.position;
             bool moving = Mathf.Abs(d.x) > 0.5f || Mathf.Abs(d.z) > 0.25f;
 
-            if (d.x > 0.5) CmdSetMoveRawX(1);
-            else if (d.x < -0.5) CmdSetMoveRawX(-1);
-            else CmdSetMoveRawX(0);
+            if (d.x > 0.5) TrySetMoveRawX(1);
+            else if (d.x < -0.5) TrySetMoveRawX(-1);
+            else TrySetMoveRawX(0);
 
             if (Mathf.Abs(d.x) < 2 || Mathf.Abs(d.z / d.x) < 1.2f)
             {
-                if (d.z > 0.25) CmdSetMoveRawZ(1);
-                else if (d.z < -0.25) CmdSetMoveRawZ(-1);
-                else CmdSetMoveRawZ(0);
+                if (d.z > 0.25) TrySetMoveRawZ(1);
+                else if (d.z < -0.25) TrySetMoveRawZ(-1);
+                else TrySetMoveRawZ(0);
             }
-            else CmdSetMoveRawZ(0);
+            else TrySetMoveRawZ(0);
 
             return !moving;
         }
 
         public override void OnStartClient()
         {
-            if (faceLeft)
+            if (team == GameTeam.Enemy)
                 transform.localEulerAngles = new Vector3(0, 180, 0);
 
-            if (faceLeft)
+            if (team == GameTeam.Enemy)
                 enemyTeam.Add(this);
             else
                 playerTeam.Add(this);
         }
         public override void OnStartServer()
         {
-            if (faceLeft)
+            if (team == GameTeam.Enemy)
                 StartCoroutine(StartEnemyAI());
+        }
+
+        public void OnHit()
+        {
+            AddImpact(team == GameTeam.Enemy ? Vector3.right : Vector3.left, hitForce);
+        }
+        public void TrySetMoveRawX(float raw)
+        {
+            if (raw == moveRaw.x)
+                return;
+            CmdSetMoveRawX(raw);
+        }
+        public void TrySetMoveRawZ(float raw)
+        {
+            if (raw == moveRaw.z)
+                return;
+            CmdSetMoveRawZ(raw);
         }
 
         [Command]

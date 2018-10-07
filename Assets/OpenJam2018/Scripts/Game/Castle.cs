@@ -9,6 +9,7 @@ namespace OpenJam2018
     {
 
         public Character archer, swordsman;
+        public BoxCollider playerSpawnArea;
         public BoxCollider[] groundSpawnAreas = new BoxCollider[0];
         public Transform archerStartPositionMin, archerStartPositionMax;
         public int archerCount = 5;
@@ -23,6 +24,11 @@ namespace OpenJam2018
         {
             // StartCoroutine(StartSpawnArcher());
             StartCoroutine(StartSpawnSwordsman());
+        }
+
+        public Vector3 RandomPlayerPosition()
+        {
+            return RandomPosition(new BoxCollider[] { playerSpawnArea });
         }
 
         IEnumerator StartSpawnArcher()
@@ -51,7 +57,7 @@ namespace OpenJam2018
                     continue;
 
                 Character character = Instantiate(swordsman, RandomPosition(groundSpawnAreas), Quaternion.identity);
-                character.faceLeft = true;
+                character.team = GameTeam.Enemy;
                 NetworkServer.Spawn(character.gameObject);
                 m_Swordsmans.Add(character);
             }

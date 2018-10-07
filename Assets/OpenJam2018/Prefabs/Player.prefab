@@ -78,3 +78,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterNetId: 4294967295
+  swordsman: {fileID: 7138175429940824526, guid: 81f97928250429049ba444d2d4f4edfe,
+    type: 3}
+  archer: {fileID: 5150208642721437988, guid: 60f49d591787c4ede9e3d7b4c3f41c8a, type: 3}

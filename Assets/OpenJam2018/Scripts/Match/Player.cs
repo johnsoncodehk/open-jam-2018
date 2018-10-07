@@ -11,15 +11,16 @@ namespace OpenJam2018
         [SyncVar(hook = "characterNetIdHook")]
         public uint characterNetId = NetworkInstanceId.Invalid.Value;
 
+        public Character swordsman, archer;
+
         Character m_Character;
 
         public override void OnStartServer()
         {
-            GameObject character = NetworkManagerHandler.instance.spawnPrefabs.Find(prefab => prefab.name == "Swordsman");
-            character = Instantiate(character);
-            NetworkServer.SpawnWithClientAuthority(character, connectionToClient);
+            Character character = Instantiate(archer, FindObjectOfType<Castle>().RandomPlayerPosition(), Quaternion.identity);
+            NetworkServer.SpawnWithClientAuthority(character.gameObject, connectionToClient);
 
-            characterNetId = character.GetComponent<Character>().netId.Value;
+            characterNetId = character.netId.Value;
         }
         public override void OnStartClient()
         {
@@ -39,8 +40,13 @@ namespace OpenJam2018
                 if (Input.GetButtonDown("Vertical") || Input.GetButtonUp("Vertical"))
                     m_Character.CmdSetMoveRawZ(Input.GetAxisRaw("Vertical"));
 
+
                 if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
-                    m_Character.CmdLookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                {
+                    Vector3 mousePosition = Input.mousePosition;
+                    mousePosition.z = m_Character.transform.position.z - Camera.main.transform.position.z;
+                    m_Character.CmdLookAt(Camera.main.ScreenToWorldPoint(mousePosition));
+                }
 
                 if (Input.GetButtonDown("Fire1"))
                     m_Character.CmdAttack();
