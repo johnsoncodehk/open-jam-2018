@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16fe8c7b82a0b448c818d1258070b1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  archer: {fileID: 5150208642721437988, guid: 60f49d591787c4ede9e3d7b4c3f41c8a, type: 3}
+  archer: {fileID: 3824681474123249007, guid: 85b71c01a52ac420eba33fc10d228640, type: 3}
   swordsman: {fileID: 4409052259358397838, guid: 4296fad9d7cf6423b89ee42115d293b0,
     type: 3}
   playerSpawnArea: {fileID: 561888913}
@@ -279,12 +279,8 @@ MonoBehaviour:
   - {fileID: 1056870682}
   - {fileID: 984138382}
   - {fileID: 1093109191}
-  archerStartPositionMin: {fileID: 0}
-  archerStartPositionMax: {fileID: 0}
-  archerCount: 5
-  warriorCount: 100
-  archerPerTime: 1
-  warriorPerTime: 0.2
+  bowSpawnAreas:
+  - {fileID: 1217626012}
 --- !u!114 &619648780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,6 +709,50 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 0, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1217626010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1217626011}
+  - component: {fileID: 1217626012}
+  m_Layer: 0
+  m_Name: Bow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1217626011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217626010}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8, y: 4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2065555567}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1217626012
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217626010}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 0, z: 6}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1296412969
 GameObject:
   m_ObjectHideFlags: 0
@@ -1075,6 +1115,7 @@ Transform:
   - {fileID: 1056870681}
   - {fileID: 984138381}
   - {fileID: 1093109190}
+  - {fileID: 1217626011}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

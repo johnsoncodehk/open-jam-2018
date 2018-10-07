@@ -9,8 +9,9 @@ namespace OpenJam2018
 
         public static List<Arrow> deadArrows = new List<Arrow>();
 
-        [HideInInspector] public GameTeam team;
+        public GameTeam team;
         public int atk = 1;
+        public float hitForce = 1;
 
         Rigidbody m_Rigidbody;
         Collider m_Collider;
@@ -48,7 +49,7 @@ namespace OpenJam2018
                 enabled = false;
                 transform.SetParent(character.transform.Find("body/head"));
 
-                character.OnHit(1);
+                character.OnHit(atk, hitForce);
                 GetComponent<SpriteRenderer>().sortingOrder = -1;
                 return;
             }

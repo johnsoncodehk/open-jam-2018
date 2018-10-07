@@ -881,7 +881,7 @@ MonoBehaviour:
   hp: 10
   atk: 2
   moveRaw: {x: 0, y: 0, z: 0}
-  moveSpeed: 1
+  moveSpeed: 1.5
   hitForce: 1
   hurtColor: {r: 0.7735849, g: 0.37584552, b: 0.37584552, a: 1}
   ghost: {fileID: 2378596938300125648, guid: 0065bbb5b6b044df696136345d46e213, type: 3}

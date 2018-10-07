@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 9013938791062332110, guid: 81f97928250429049ba444d2d4f4edfe,
         type: 3}
       propertyPath: m_Name
-      value: Swordsman Variant
+      value: EnemySwordsman
       objectReference: {fileID: 0}
     - target: {fileID: 4822195112797123512, guid: 81f97928250429049ba444d2d4f4edfe,
         type: 3}
@@ -170,5 +170,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 720dffe897d1a46158f7a98c537198be,
         type: 3}
+    - target: {fileID: 7138175429940824526, guid: 81f97928250429049ba444d2d4f4edfe,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81f97928250429049ba444d2d4f4edfe, type: 3}

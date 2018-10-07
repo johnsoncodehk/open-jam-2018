@@ -119,9 +119,8 @@ MonoBehaviour:
   team: 0
   hp: 2
   atk: 1
-  moveRaw: {x: 0, y: 0, z: 0}
   moveSpeed: 1
-  hitForce: 1
+  hitForce: 2
   hurtColor: {r: 0.7735849, g: 0.37584552, b: 0.37584552, a: 1}
   ghost: {fileID: 2378596938300125648, guid: 0065bbb5b6b044df696136345d46e213, type: 3}
   arrow: {fileID: 6746563547595937247}
@@ -514,6 +513,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 0
   atk: 1
+  hitForce: 1
 --- !u!65 &4632713575178709151
 BoxCollider:
   m_ObjectHideFlags: 0

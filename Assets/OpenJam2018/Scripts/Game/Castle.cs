@@ -11,7 +11,7 @@ namespace OpenJam2018
         public Character archer, swordsman;
         public BoxCollider playerSpawnArea;
         public BoxCollider[] groundSpawnAreas = new BoxCollider[0];
-        public Transform archerStartPositionMin, archerStartPositionMax;
+        public BoxCollider[] bowSpawnAreas = new BoxCollider[0];
 
         int m_ArcherCount = 5;
         int m_SwordsmanCount = 10;
@@ -20,7 +20,7 @@ namespace OpenJam2018
 
         public override void OnStartServer()
         {
-            // StartCoroutine(StartSpawnArcher());
+            StartCoroutine(StartSpawnArcher());
             StartCoroutine(StartSpawnSwordsman());
         }
 
@@ -29,22 +29,20 @@ namespace OpenJam2018
             return RandomPosition(new BoxCollider[] { playerSpawnArea });
         }
 
-        // IEnumerator StartSpawnArcher()
-        // {
-        //     while (true)
-        //     {
-        //         yield return new WaitForSeconds(archerPerTime);
+        IEnumerator StartSpawnArcher()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(m_ArcherPerTime);
 
-        //         if (m_Archers.Count > archerCount)
-        //             continue;
+                if (Character.enemyBowTeam.Count > m_ArcherCount)
+                    continue;
 
-        //         Character character = Instantiate(archer);
-        //         float randomX = Random.Range(archerStartPositionMin.position.x, archerStartPositionMax.position.x);
-        //         float randomY = Random.Range(archerStartPositionMin.position.y, archerStartPositionMax.position.y);
-        //         character.transform.position = new Vector2(randomX, randomY);
-        //         m_Archers.Add(character);
-        //     }
-        // }
+                Character character = Instantiate(archer, RandomPosition(bowSpawnAreas), Quaternion.identity);
+                character.team = GameTeam.Enemy;
+                NetworkServer.Spawn(character.gameObject);
+            }
+        }
         IEnumerator StartSpawnSwordsman()
         {
             while (true)

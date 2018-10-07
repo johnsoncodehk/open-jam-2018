@@ -10,18 +10,19 @@ namespace OpenJam2018
 
         public static List<Character> playerTeam = new List<Character>();
         public static List<Character> enemyTeam = new List<Character>();
+        public static List<Character> enemyBowTeam = new List<Character>();
 
         [SyncVar, HideInInspector] public GameTeam team;
         public int raw => team == GameTeam.Player ? 1 : -1;
 
         [SyncVar] public int hp = 1;
         public int atk = 1;
-        public Vector3 moveRaw;
         public float moveSpeed = 1;
         public float hitForce = 1;
         public Color hurtColor;
         public GameObject ghost;
 
+        Vector3 m_MoveRaw;
         Rigidbody m_Rigidbody;
         CharacterController m_Controller;
         Animator m_Animator;
@@ -42,10 +43,10 @@ namespace OpenJam2018
         }
         void Update()
         {
-            m_Animator.SetFloat("Move Raw X", moveRaw.x * raw);
-            m_Animator.SetFloat("Move Raw Z", moveRaw.z);
+            m_Animator.SetFloat("Move Raw X", m_MoveRaw.x * raw);
+            m_Animator.SetFloat("Move Raw Z", m_MoveRaw.z);
 
-            m_Controller.SimpleMove(moveRaw * moveSpeed);
+            m_Controller.SimpleMove(m_MoveRaw * moveSpeed);
 
             if (m_Impact.magnitude > 0.2)
             {
@@ -75,14 +76,17 @@ namespace OpenJam2018
                 if (character)
                 {
                     if (character.team != team)
-                        OnHit(character.atk);
+                        OnHit(character.atk, character.hitForce);
                 }
             }
         }
         void OnDestroy()
         {
             if (team == GameTeam.Enemy)
-                enemyTeam.Remove(this);
+                if (this is ArcherCharacter)
+                    enemyBowTeam.Remove(this);
+                else
+                    enemyTeam.Remove(this);
             else
                 playerTeam.Remove(this);
 
@@ -96,37 +100,40 @@ namespace OpenJam2018
             m_Impact += dir.normalized * force / m_Rigidbody.mass;
             m_Impact0 = m_Impact;
         }
-        IEnumerator StartEnemyAI()
+        protected virtual IEnumerator StartEnemyAI()
         {
             while (true)
             {
                 yield return new WaitForSeconds(Random.Range(0.05f, 0.2f));
 
-                var (target, distance) = FindNearPlayer();
+                Vector3 offset = new Vector3(0.5f, 0, 0);
+                var (target, distance) = FindNearPlayer(offset);
 
-                if (!target) {
+                if (!target)
+                {
                     TrySetMoveRawX(0);
                     TrySetMoveRawZ(0);
                     continue;
                 }
 
-                if (!MoveToTarget(target))
+                if (!MoveTo(target.transform.position + offset))
                     continue;
 
                 CmdAttack();
+                yield return new WaitForSeconds(0.5f);
             }
         }
-        (Character, float) FindNearPlayer()
+        protected (Character, float) FindNearPlayer(Vector3 offset)
         {
             if (playerTeam.Count == 0)
                 return (null, 0);
 
             Character nearC = playerTeam[0];
-            float nearD = Vector3.Distance(transform.position, nearC.transform.position + new Vector3(0.5f, 0, 0));
+            float nearD = Vector3.Distance(transform.position, nearC.transform.position + offset);
             for (int i = 1; i < playerTeam.Count; i++)
             {
                 Character c = playerTeam[i];
-                float d = Vector3.Distance(transform.position, c.transform.position + new Vector3(0.5f, 0, 0));
+                float d = Vector3.Distance(transform.position, c.transform.position + offset);
                 if (d < nearD)
                 {
                     nearC = c;
@@ -135,9 +142,9 @@ namespace OpenJam2018
             }
             return (nearC, nearD);
         }
-        bool MoveToTarget(Character target)
+        protected bool MoveTo(Vector3 position)
         {
-            Vector3 d = (target.transform.position + new Vector3(0.5f, 0, 0)) - transform.position;
+            Vector3 d = position - transform.position;
             bool moving = Mathf.Abs(d.x) > 0.5f || Mathf.Abs(d.z) > 0.25f;
 
             if (d.x > 0.5) TrySetMoveRawX(1);
@@ -161,7 +168,12 @@ namespace OpenJam2018
                 transform.localEulerAngles = new Vector3(0, 180, 0);
 
             if (team == GameTeam.Enemy)
-                enemyTeam.Add(this);
+            {
+                if (this is ArcherCharacter)
+                    enemyBowTeam.Add(this);
+                else
+                    enemyTeam.Add(this);
+            }
             else
                 playerTeam.Add(this);
         }
@@ -171,22 +183,22 @@ namespace OpenJam2018
                 StartCoroutine(StartEnemyAI());
         }
 
-        public void OnHit(int atk)
+        public void OnHit(int atk, float force)
         {
-            AddImpact(team == GameTeam.Enemy ? Vector3.right : Vector3.left, hitForce);
+            AddImpact(team == GameTeam.Enemy ? Vector3.right : Vector3.left, force);
             hp -= atk;
             if (hp <= 0 && isServer)
                 NetworkServer.Destroy(gameObject);
         }
         public void TrySetMoveRawX(float raw)
         {
-            if (raw == moveRaw.x)
+            if (raw == m_MoveRaw.x)
                 return;
             CmdSetMoveRawX(raw);
         }
         public void TrySetMoveRawZ(float raw)
         {
-            if (raw == moveRaw.z)
+            if (raw == m_MoveRaw.z)
                 return;
             CmdSetMoveRawZ(raw);
         }
@@ -222,12 +234,12 @@ namespace OpenJam2018
         [ClientRpc]
         public void RpcSetMoveRawX(float raw)
         {
-            moveRaw.x = raw;
+            m_MoveRaw.x = raw;
         }
         [ClientRpc]
         public void RpcSetMoveRawZ(float raw)
         {
-            moveRaw.z = raw;
+            m_MoveRaw.z = raw;
         }
         [ClientRpc]
         public void RpcAttack()
@@ -245,8 +257,6 @@ namespace OpenJam2018
             m_Animator.SetTrigger("Attack");
         }
         public virtual void LookAt(Vector2 position)
-        {
-
-        }
+        { }
     }
 }
