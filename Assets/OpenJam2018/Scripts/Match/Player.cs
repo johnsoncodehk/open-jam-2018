@@ -27,10 +27,20 @@ namespace OpenJam2018
             while (!FindObjectOfType<Game>())
                 yield return new WaitForEndOfFrame();
 
-            GameObject character = Instantiate(NetworkManagerHandler.instance.spawnPrefabs[Random.Range(0, 2)], FindObjectOfType<Game>().RandomPlayerPosition(), Quaternion.identity);
+            RandomCharacter();
+        }
+
+        public void RandomCharacter()
+        {
+            Character character = Instantiate(
+                NetworkManagerHandler.instance.spawnPrefabs[Random.Range(0, 2)],
+                FindObjectOfType<Game>().RandomPlayerPosition(),
+                Quaternion.identity
+            ).GetComponent<Character>(); ;
             NetworkServer.SpawnWithClientAuthority(character.gameObject, connectionToClient);
 
-            characterNetId = character.GetComponent<Character>().netId.Value;
+            characterNetId = character.netId.Value;
+            character.onDead += RandomCharacter;
         }
 
         void Update()
@@ -46,15 +56,8 @@ namespace OpenJam2018
                 if (Input.GetButtonDown("Vertical") || Input.GetButtonUp("Vertical"))
                     m_Character.CmdSetMoveRawZ(Input.GetAxisRaw("Vertical"));
 
-
                 if (m_ArcherCharacter && (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0))
-                {
-                    // ToCameraPosition(m_ArcherCharacter.bowHolder);
-                    // Vector3 mousePosition = Input.mousePosition;
-                    // mousePosition.z = m_Character.transform.position.z - InputCamera.instance.transform.position.z;
-                    // m_Character.CmdLookAt(InputCamera.instance.ScreenToWorldPoint(mousePosition));
                     m_Character.CmdLookAt(GetLook(m_ArcherCharacter.bowHolder));
-                }
 
                 if (Input.GetButtonDown("Fire1"))
                     m_Character.CmdAttack();
@@ -102,7 +105,7 @@ namespace OpenJam2018
 
             d.x = Mathf.Max(1f, d.x);
 
-            return character.position + d;;
+            return character.position + d;
         }
     }
 }

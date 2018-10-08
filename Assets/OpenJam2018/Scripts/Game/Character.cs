@@ -22,6 +22,7 @@ namespace OpenJam2018
         public Color hurtColor;
         public GameObject ghost;
         public Material material;
+        public event System.Action onDead;
 
         Vector3 m_MoveRaw;
         Rigidbody m_Rigidbody;
@@ -194,8 +195,10 @@ namespace OpenJam2018
         {
             AddImpact(team == GameTeam.Enemy ? Vector3.right : Vector3.left, force);
             hp -= atk;
-            if (hp <= 0 && isServer)
+            if (hp <= 0 && isServer) {
+                if (onDead != null) onDead();
                 NetworkServer.Destroy(gameObject);
+            }
         }
         public void TrySetMoveRawX(float raw)
         {
