@@ -127,14 +127,20 @@ namespace OpenJam2018
         }
         protected (Character, float) FindNearPlayer(Vector3 offset)
         {
-            if (playerTeam.Count == 0)
+            var (nearC, nearD) = FindNearPlayerByList(playerTeam.FindAll(p => p.transform.position.x < transform.position.x), offset);
+            if (!nearC) (nearC, nearD) = FindNearPlayerByList(playerTeam, offset);
+            return (nearC, nearD);
+        }
+        protected (Character, float) FindNearPlayerByList(List<Character> players, Vector3 offset)
+        {
+            if (players.Count == 0)
                 return (null, 0);
 
-            Character nearC = playerTeam[0];
+            Character nearC = players[0];
             float nearD = Vector3.Distance(transform.position, nearC.transform.position + offset);
-            for (int i = 1; i < playerTeam.Count; i++)
+            for (int i = 1; i < players.Count; i++)
             {
-                Character c = playerTeam[i];
+                Character c = players[i];
                 float d = Vector3.Distance(transform.position, c.transform.position + offset);
                 if (d < nearD)
                 {
@@ -195,7 +201,8 @@ namespace OpenJam2018
         {
             AddImpact(team == GameTeam.Enemy ? Vector3.right : Vector3.left, force);
             hp -= atk;
-            if (hp <= 0 && isServer) {
+            if (hp <= 0 && isServer)
+            {
                 if (onDead != null) onDead();
                 NetworkServer.Destroy(gameObject);
             }
@@ -228,6 +235,7 @@ namespace OpenJam2018
         [Command]
         public void CmdAttack()
         {
+            m_SyncPosition = true;
             RpcAttack();
         }
         [Command]

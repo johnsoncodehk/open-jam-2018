@@ -52,7 +52,7 @@ namespace OpenJam2018
             ShowState(creatingGame);
 
             NetworkManagerHandler.instance.StartMatchMaker();
-            NetworkManagerHandler.instance.matchMaker.CreateMatch(name, 16, true, "", "", "", 0, 0, (bool success, string extendedInfo, MatchInfo matchInfo) =>
+            NetworkManagerHandler.instance.matchMaker.CreateMatch(name, 20, true, "", "", "", 0, 0, (bool success, string extendedInfo, MatchInfo matchInfo) =>
             {
                 if (!success)
                 {

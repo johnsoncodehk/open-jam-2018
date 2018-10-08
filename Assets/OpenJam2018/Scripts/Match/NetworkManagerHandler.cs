@@ -13,17 +13,6 @@ namespace OpenJam2018
         {
             instance = this;
         }
-        void OnApplicationQuit()
-        {
-            Debug.Log("OnApplicationQuit");
-
-            if (NetworkServer.active)
-                StopHost();
-            if (NetworkClient.active)
-                StopClient();
-
-            StopMatchMaker();
-        }
 
         public override void OnClientConnect(NetworkConnection conn)
         {
