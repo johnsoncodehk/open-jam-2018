@@ -116,13 +116,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  hp: 4
+  hp: 3
   atk: 1
   moveSpeed: 1
-  hitForce: 2
+  hitForce: 1
   hurtColor: {r: 0.7735849, g: 0.37584552, b: 0.37584552, a: 1}
   ghost: {fileID: 2378596938300125648, guid: 0065bbb5b6b044df696136345d46e213, type: 3}
   material: {fileID: 2100000, guid: fb34ead6228227c459b6ed54fa745f26, type: 2}
+  attackRecovery: 1
   arrow: {fileID: 6746563547595937247}
   bowHolder: {fileID: 6528164800272453537}
   arrowSpeed: 20

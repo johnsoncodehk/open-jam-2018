@@ -47,7 +47,7 @@ namespace OpenJam2018
                 lookAt.y += Random.Range(1, 10);
                 CmdLookAt(lookAt);
                 CmdAttack();
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(attackRecovery);
             }
         }
     }

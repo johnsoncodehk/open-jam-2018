@@ -59,7 +59,7 @@ namespace OpenJam2018
             {
                 if (!success)
                 {
-                    ShowState(gameCreated);
+                    ShowState(gameCreateFailed);
                     return;
                 }
                 ShowState(gameCreated);

@@ -24,7 +24,7 @@ namespace OpenJam2018
         }
         IEnumerator WaitGameSceneReady()
         {
-            while (!FindObjectOfType<Game>())
+            while (!Game.instance)
                 yield return new WaitForEndOfFrame();
 
             RandomCharacter();
@@ -32,6 +32,10 @@ namespace OpenJam2018
 
         public void RandomCharacter()
         {
+            if (Game.instance.playerRemain <= 0)
+                return;
+            Game.instance.playerRemain--;
+
             Character character = Instantiate(
                 NetworkManagerHandler.instance.spawnPrefabs[Random.Range(0, 2)],
                 FindObjectOfType<Game>().RandomPlayerPosition(),

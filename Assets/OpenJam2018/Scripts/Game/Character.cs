@@ -23,6 +23,7 @@ namespace OpenJam2018
         public GameObject ghost;
         public Material material;
         public event System.Action onDead;
+        public float attackRecovery = 0.5f;
 
         Vector3 m_MoveRaw;
         Rigidbody m_Rigidbody;
@@ -92,6 +93,8 @@ namespace OpenJam2018
             else
                 playerTeam.Remove(this);
 
+            Game.instance.CheckGameOver();
+
             if (NetworkServer.active || NetworkClient.active)
                 Instantiate(ghost, m_LastPosition, Quaternion.identity);
         }
@@ -109,7 +112,7 @@ namespace OpenJam2018
             {
                 yield return new WaitForSeconds(Random.Range(0.05f, 0.2f));
 
-                Vector3 offset = new Vector3(0.5f, 0, 0);
+                Vector3 offset = new Vector3(0.4f, 0, 0);
                 var (target, distance) = FindNearPlayer(offset);
 
                 if (!target)
@@ -122,7 +125,7 @@ namespace OpenJam2018
                     continue;
 
                 CmdAttack();
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(attackRecovery);
             }
         }
         protected (Character, float) FindNearPlayer(Vector3 offset)
@@ -159,7 +162,7 @@ namespace OpenJam2018
             else if (d.x < -0.5) TrySetMoveRawX(-1);
             else TrySetMoveRawX(0);
 
-            if (Mathf.Abs(d.x) < 2 || Mathf.Abs(d.x / d.z) < 2f)
+            if (Mathf.Abs(d.x) < 2 || Mathf.Abs(d.x / d.z) < 4f)
             {
                 if (d.z > 0.25) TrySetMoveRawZ(1);
                 else if (d.z < -0.25) TrySetMoveRawZ(-1);
