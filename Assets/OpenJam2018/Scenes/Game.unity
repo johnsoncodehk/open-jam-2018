@@ -3758,7 +3758,6 @@ MonoBehaviour:
     type: 3}
   bossSwordsman: {fileID: 6036120844211394374, guid: 52a243d3677c144c7a4eaa0a358a343a,
     type: 3}
-  playArea: {fileID: 0}
   playerSpawnArea: {fileID: 561888913}
   groundSpawnAreas:
   - {fileID: 1056870682}
@@ -3771,6 +3770,7 @@ MonoBehaviour:
   enemyRemainText: {fileID: 142956631}
   gameOverText: {fileID: 1972411600}
   quitButton: {fileID: 2094673788}
+  ghost: {fileID: 2378596938300125648, guid: 0065bbb5b6b044df696136345d46e213, type: 3}
   playerRemain: 0
   enemyRemain: 0
 --- !u!114 &646269593

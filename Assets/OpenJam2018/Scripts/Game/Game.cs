@@ -24,6 +24,7 @@ namespace OpenJam2018
         public BoxCollider[] bowSpawnAreas = new BoxCollider[0];
         public Text playerRemainText, enemyRemainText, gameOverText;
         public Button quitButton;
+        public GameObject ghost;
 
         [SyncVar(hook = "HookPlayerRemain")] public int playerRemain;
         [SyncVar(hook = "HookEnemyRemain")] public int enemyRemain;
@@ -40,7 +41,8 @@ namespace OpenJam2018
                 playerRemain = 5;
                 enemyRemain = 2000;
             }
-            else {
+            else
+            {
                 playerRemain = 100;
                 enemyRemain = 2000;
             }
@@ -73,9 +75,19 @@ namespace OpenJam2018
             CmdGameOver(win);
         }
         [Command]
+        public void CmdCreateGhost(Vector3 position)
+        {
+            RpcShowGhost(position);
+        }
+        [Command]
         public void CmdGameOver(bool win)
         {
             RpcGameOver(win);
+        }
+        [ClientRpc]
+        public void RpcShowGhost(Vector3 position)
+        {
+            Instantiate(ghost, position, Quaternion.identity);
         }
         [ClientRpc]
         public void RpcGameOver(bool win)

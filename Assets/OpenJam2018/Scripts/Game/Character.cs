@@ -20,7 +20,6 @@ namespace OpenJam2018
         public float moveSpeed = 1;
         public float hitForce = 1;
         public Color hurtColor;
-        public GameObject ghost;
         public Material material;
         public event System.Action onDead;
         public float attackRecovery = 0.5f;
@@ -94,9 +93,6 @@ namespace OpenJam2018
                 playerTeam.Remove(this);
 
             Game.instance.CheckGameOver();
-
-            if (NetworkServer.active || NetworkClient.active)
-                Instantiate(ghost, m_LastPosition, Quaternion.identity);
         }
 
         void AddImpact(Vector3 dir, float force)
@@ -208,6 +204,7 @@ namespace OpenJam2018
             {
                 if (onDead != null) onDead();
                 NetworkServer.Destroy(gameObject);
+                Game.instance.CmdCreateGhost(m_LastPosition);
             }
         }
         public void TrySetMoveRawX(float raw)
