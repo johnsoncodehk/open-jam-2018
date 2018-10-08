@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
 
 namespace OpenJam2018
 {
@@ -9,9 +10,18 @@ namespace OpenJam2018
     {
         public static NetworkManagerHandler instance;
 
+        public MatchInfo m_MatchInfo;
+
         void Awake()
         {
             instance = this;
+        }
+        void OnApplicationQuit()
+        {
+            if (m_MatchInfo != null)
+            {
+                matchMaker.DestroyMatch(m_MatchInfo.networkId, m_MatchInfo.domain, (bool success, string extendedInfo) => { });
+            }
         }
 
         public override void OnClientConnect(NetworkConnection conn)
@@ -31,6 +41,7 @@ namespace OpenJam2018
             Debug.Log("OnServerDisconnect: " + conn);
             NetworkServer.DestroyPlayersForConnection(conn);
         }
+
 
         public static GameObject FindLocalObject(NetworkInstanceId netId)
         {

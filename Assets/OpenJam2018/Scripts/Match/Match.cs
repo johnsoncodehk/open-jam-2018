@@ -41,13 +41,7 @@ namespace OpenJam2018
                 }
                 m_MatchInfoSnapshot = matches[0];
                 ShowState(gameFound);
-                gameInfo.text = ""
-                    + "\n" + "networkId: " + m_MatchInfoSnapshot.networkId
-                    + "\n" + "size: " + m_MatchInfoSnapshot.currentSize + "/" + m_MatchInfoSnapshot.maxSize
-                    + "\n" + "hostNodeId: " + m_MatchInfoSnapshot.hostNodeId
-                    + "\n" + "networkId: " + m_MatchInfoSnapshot.networkId
-                    + "\n" + "directConnectCount: " + m_MatchInfoSnapshot.directConnectInfos.Count
-                ;
+                gameInfo.text = "size: " + m_MatchInfoSnapshot.currentSize + "/" + m_MatchInfoSnapshot.maxSize;
             });
         }
         public void CreateGame()
@@ -62,6 +56,7 @@ namespace OpenJam2018
                     ShowState(gameCreateFailed);
                     return;
                 }
+                NetworkManagerHandler.instance.m_MatchInfo = matchInfo;
                 ShowState(gameCreated);
                 NetworkManagerHandler.instance.StartHost(matchInfo);
             });
