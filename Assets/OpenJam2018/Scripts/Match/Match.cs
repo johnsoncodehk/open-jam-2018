@@ -25,6 +25,7 @@ namespace OpenJam2018
 
         public void LocalHost()
         {
+            Game.mode = GameMode.Local;
             NetworkManagerHandler.instance.StartHost();
         }
         public void SearchGame()
@@ -58,6 +59,7 @@ namespace OpenJam2018
                 }
                 NetworkManagerHandler.instance.m_MatchInfo = matchInfo;
                 ShowState(gameCreated);
+                Game.mode = GameMode.Online;
                 NetworkManagerHandler.instance.StartHost(matchInfo);
             });
         }
@@ -74,6 +76,7 @@ namespace OpenJam2018
                     return;
                 }
                 ShowState(gameJoined);
+                Game.mode = GameMode.Online;
                 NetworkManagerHandler.instance.StartClient(matchInfo);
             });
         }
