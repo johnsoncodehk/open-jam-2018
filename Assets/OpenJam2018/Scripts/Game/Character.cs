@@ -94,7 +94,8 @@ namespace OpenJam2018
             else
                 playerTeam.Remove(this);
 
-            Game.instance.CheckGameOver();
+            if (Game.instance)
+                Game.instance.CheckGameOver();
         }
 
         void AddImpact(Vector3 dir, float force)

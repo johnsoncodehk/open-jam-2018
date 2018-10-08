@@ -71,7 +71,7 @@ namespace OpenJam2018
         }
         IEnumerator WaitToGameOver(bool win)
         {
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(3);
             CmdGameOver(win);
         }
         [Command]
@@ -92,7 +92,7 @@ namespace OpenJam2018
         [ClientRpc]
         public void RpcGameOver(bool win)
         {
-            gameOverText.text = win ? "You Win!" : "You Lose";
+            gameOverText.text = win ? "Stage Clear" : "Fail";
             gameOverText.gameObject.SetActive(true);
             quitButton.gameObject.SetActive(true);
         }
