@@ -30,7 +30,8 @@ namespace OpenJam2018
         bool m_SyncPosition;
         Vector3 m_Impact, m_Impact0;
         Material m_Material;
-        Vector3 m_StartPosition, m_LastPosition;
+        protected Vector3 m_StartPosition;
+        Vector3 m_LastPosition;
 
         void Awake()
         {

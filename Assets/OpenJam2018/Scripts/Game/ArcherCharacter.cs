@@ -38,7 +38,7 @@ namespace OpenJam2018
                 }
 
                 Vector3 moveTo = target.transform.position;
-                moveTo.x = transform.position.x;
+                moveTo.x = Mathf.Max(m_StartPosition.x, target.transform.position.x + offset.x);
                 if (!MoveTo(moveTo))
                     continue;
 
