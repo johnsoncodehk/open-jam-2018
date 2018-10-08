@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Johnson-Sprites-Default
+  m_Name: Tilt-Sprites-Default
   m_Shader: {fileID: 4800000, guid: a5c1bc7616ef79b4ebb35fdd173cec10, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 5

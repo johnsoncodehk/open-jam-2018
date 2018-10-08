@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Johnson-Simple
+  m_Name: Tilt-Default
   m_Shader: {fileID: 4800000, guid: 545a0856b54072343ab05c9d14aa7760, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 5
