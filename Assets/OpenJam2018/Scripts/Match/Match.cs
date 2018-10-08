@@ -10,14 +10,17 @@ namespace OpenJam2018
     public class Match : MonoBehaviour
     {
 
-        public GameObject searchingGame, noGameFound, creatingGame, gameCreated, gameCreateFailed, gameFound, joiningGame, gameJoinFailed, gameJoined;
+        public GameObject searchingGame, noGameFound, creatingGame, gameCreated, gameCreateFailed, gameFound, joiningGame, gameJoinFailed, gameJoined, notSupport;
         public Text gameInfo;
 
         MatchInfoSnapshot m_MatchInfoSnapshot;
 
         void Start()
         {
-            SearchGame();
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+                ShowState(notSupport);
+            else
+                SearchGame();
         }
 
         public void LocalHost()
@@ -96,6 +99,7 @@ namespace OpenJam2018
             joiningGame.SetActive(false);
             gameJoinFailed.SetActive(false);
             gameJoined.SetActive(false);
+            notSupport.SetActive(false);
         }
     }
 }
