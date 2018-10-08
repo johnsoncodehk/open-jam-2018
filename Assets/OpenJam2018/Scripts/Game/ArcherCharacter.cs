@@ -21,7 +21,11 @@ namespace OpenJam2018
             arrow.atk = atk;
             arrow.hitForce = hitForce;
             arrow.Spawn(team == GameTeam.Player ? arrowSpeed : Random.Range(0, arrowSpeed));
+
+            m_AttackAudio.Play();
         }
+        public override void OnAttack()
+        { }
         protected override IEnumerator StartEnemyAI()
         {
             while (true)
@@ -45,6 +49,7 @@ namespace OpenJam2018
                 Vector3 lookAt = bowHolder.position;
                 lookAt.x -= Random.Range(1, 5);
                 lookAt.y += Random.Range(1, 10);
+                yield return new WaitForSeconds(Random.Range(0f, attackRecovery));
                 CmdLookAt(lookAt);
                 CmdAttack();
                 yield return new WaitForSeconds(attackRecovery);

@@ -32,12 +32,14 @@ namespace OpenJam2018
         Vector3 m_Impact, m_Impact0;
         Material m_Material;
         protected Vector3 m_StartPosition;
+        protected AudioSource m_AttackAudio;
         Vector3 m_LastPosition;
 
         void Awake()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
             m_Controller = GetComponent<CharacterController>();
+            m_AttackAudio = GetComponent<AudioSource>();
             m_Animator = GetComponent<Animator>();
             m_Material = Instantiate(material);
             foreach (SpriteRenderer sprite in GetComponentsInChildren<SpriteRenderer>(true))
@@ -273,6 +275,10 @@ namespace OpenJam2018
         public virtual void Attack()
         {
             m_Animator.SetTrigger("Attack");
+        }
+        public virtual void OnAttack()
+        {
+            m_AttackAudio.Play();
         }
         public virtual void LookAt(Vector2 position)
         { }

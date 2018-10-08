@@ -29,8 +29,8 @@ namespace OpenJam2018
         [SyncVar(hook = "HookPlayerRemain")] public int playerRemain;
         [SyncVar(hook = "HookEnemyRemain")] public int enemyRemain;
 
-        int m_ArcherCount = 20;
-        int m_SwordsmanCount = 100;
+        int m_ArcherCount = 10;
+        int m_SwordsmanCount = 50;
         float m_ArcherPerTime = 0.5f;
         float m_SwordsmanPerTime = 0.2f;
 

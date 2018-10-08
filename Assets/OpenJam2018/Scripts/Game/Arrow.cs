@@ -45,14 +45,6 @@ namespace OpenJam2018
             Character character = other.GetComponent<Character>();
             if (character && character.team != team)
             {
-                // deadArrows.Add(this);
-
-                // Destroy(m_Rigidbody);
-                // Destroy(m_Collider);
-                // enabled = false;
-                // transform.SetParent(character.transform.Find("body/head"));
-                // GetComponent<SpriteRenderer>().sortingOrder = -1;
-
                 character.OnHit(atk, hitForce);
                 Destroy(gameObject);
                 return;
