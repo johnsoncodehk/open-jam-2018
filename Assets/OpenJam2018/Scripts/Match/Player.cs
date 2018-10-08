@@ -80,6 +80,16 @@ namespace OpenJam2018
                 m_Character = NetworkManagerHandler.FindLocalObject(new NetworkInstanceId(characterNetId)).GetComponent<Character>();
                 if (m_Character is ArcherCharacter)
                     m_ArcherCharacter = m_Character as ArcherCharacter;
+
+                if (isLocalPlayer)
+                {
+                    // Keep player next character moving
+                    if (Input.GetButton("Horizontal"))
+                        m_Character.CmdSetMoveRawX(Input.GetAxisRaw("Horizontal"));
+
+                    if (Input.GetButton("Vertical"))
+                        m_Character.CmdSetMoveRawZ(Input.GetAxisRaw("Vertical"));
+                }
             }
             else
             {

@@ -39,12 +39,12 @@ namespace OpenJam2018
             if (mode == GameMode.Local)
             {
                 playerRemain = 5;
-                enemyRemain = 2000;
+                enemyRemain = 500;
             }
             else
             {
                 playerRemain = 100;
-                enemyRemain = 2000;
+                enemyRemain = 5000;
             }
             UpdatePlayerRemain();
             UpdateEnemyRemain();
