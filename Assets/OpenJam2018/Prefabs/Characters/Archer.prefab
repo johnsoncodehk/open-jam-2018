@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 335564917368398678}
   - component: {fileID: 5150208642721437988}
   - component: {fileID: 335564917368398676}
-  - component: {fileID: 335564917368398677}
   - component: {fileID: 335564917368398680}
   m_Layer: 9
   m_Name: Archer
@@ -117,15 +116,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  hp: 2
+  hp: 4
   atk: 1
   moveSpeed: 1
   hitForce: 2
   hurtColor: {r: 0.7735849, g: 0.37584552, b: 0.37584552, a: 1}
   ghost: {fileID: 2378596938300125648, guid: 0065bbb5b6b044df696136345d46e213, type: 3}
+  material: {fileID: 2100000, guid: fb34ead6228227c459b6ed54fa745f26, type: 2}
   arrow: {fileID: 6746563547595937247}
   bowHolder: {fileID: 6528164800272453537}
-  arrowSpeed: 15
+  arrowSpeed: 20
 --- !u!143 &335564917368398676
 CharacterController:
   m_ObjectHideFlags: 0
@@ -143,20 +143,6 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.5, z: 0}
---- !u!136 &335564917368398677
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 335564917368398663}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.25
-  m_Height: 1
-  m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &335564917368398680
 Rigidbody:

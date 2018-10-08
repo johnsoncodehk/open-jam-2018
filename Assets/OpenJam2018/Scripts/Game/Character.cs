@@ -21,6 +21,7 @@ namespace OpenJam2018
         public float hitForce = 1;
         public Color hurtColor;
         public GameObject ghost;
+        public Material material;
 
         Vector3 m_MoveRaw;
         Rigidbody m_Rigidbody;
@@ -36,9 +37,8 @@ namespace OpenJam2018
             m_Rigidbody = GetComponent<Rigidbody>();
             m_Controller = GetComponent<CharacterController>();
             m_Animator = GetComponent<Animator>();
-            m_Material = GetComponentInChildren<SpriteRenderer>().material;
-            m_Material = Instantiate(m_Material);
-            foreach (SpriteRenderer sprite in GetComponentsInChildren<SpriteRenderer>())
+            m_Material = Instantiate(material);
+            foreach (SpriteRenderer sprite in GetComponentsInChildren<SpriteRenderer>(true))
                 sprite.material = m_Material;
         }
         void Update()
@@ -151,7 +151,7 @@ namespace OpenJam2018
             else if (d.x < -0.5) TrySetMoveRawX(-1);
             else TrySetMoveRawX(0);
 
-            if (Mathf.Abs(d.x) < 2 || Mathf.Abs(d.x / d.z) < 1.2f)
+            if (Mathf.Abs(d.x) < 2 || Mathf.Abs(d.x / d.z) < 2f)
             {
                 if (d.z > 0.25) TrySetMoveRawZ(1);
                 else if (d.z < -0.25) TrySetMoveRawZ(-1);

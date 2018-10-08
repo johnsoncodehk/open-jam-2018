@@ -15,11 +15,14 @@ namespace OpenJam2018
 
         Rigidbody m_Rigidbody;
         Collider m_Collider;
+        SpriteRenderer m_SpriteRenderer;
 
         void Awake()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
             m_Collider = GetComponent<Collider>();
+            m_SpriteRenderer = GetComponent<SpriteRenderer>();
+            m_SpriteRenderer.material = Instantiate(m_SpriteRenderer.material);
         }
         void Update()
         {
@@ -42,15 +45,16 @@ namespace OpenJam2018
             Character character = other.GetComponent<Character>();
             if (character && character.team != team)
             {
-                deadArrows.Add(this);
+                // deadArrows.Add(this);
 
-                Destroy(m_Rigidbody);
-                Destroy(m_Collider);
-                enabled = false;
-                transform.SetParent(character.transform.Find("body/head"));
+                // Destroy(m_Rigidbody);
+                // Destroy(m_Collider);
+                // enabled = false;
+                // transform.SetParent(character.transform.Find("body/head"));
+                // GetComponent<SpriteRenderer>().sortingOrder = -1;
 
                 character.OnHit(atk, hitForce);
-                GetComponent<SpriteRenderer>().sortingOrder = -1;
+                Destroy(gameObject);
                 return;
             }
 

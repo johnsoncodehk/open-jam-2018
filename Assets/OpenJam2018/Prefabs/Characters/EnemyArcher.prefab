@@ -150,12 +150,12 @@ PrefabInstance:
     - target: {fileID: 5150208642721437988, guid: 60f49d591787c4ede9e3d7b4c3f41c8a,
         type: 3}
       propertyPath: hp
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5150208642721437988, guid: 60f49d591787c4ede9e3d7b4c3f41c8a,
         type: 3}
       propertyPath: arrowSpeed
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7977606551412728991, guid: 60f49d591787c4ede9e3d7b4c3f41c8a,
         type: 3}

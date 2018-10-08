@@ -20,7 +20,7 @@ namespace OpenJam2018
             arrow.team = team;
             arrow.atk = atk;
             arrow.hitForce = hitForce;
-            arrow.Spawn(arrowSpeed);
+            arrow.Spawn(team == GameTeam.Player ? arrowSpeed : Random.Range(0, arrowSpeed));
         }
         protected override IEnumerator StartEnemyAI()
         {

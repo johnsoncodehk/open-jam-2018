@@ -12,6 +12,7 @@ namespace OpenJam2018
         public uint characterNetId = NetworkInstanceId.Invalid.Value;
 
         Character m_Character;
+        ArcherCharacter m_ArcherCharacter;
 
         public override void OnStartServer()
         {
@@ -46,11 +47,13 @@ namespace OpenJam2018
                     m_Character.CmdSetMoveRawZ(Input.GetAxisRaw("Vertical"));
 
 
-                if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+                if (m_ArcherCharacter && (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0))
                 {
-                    Vector3 mousePosition = Input.mousePosition;
-                    mousePosition.z = m_Character.transform.position.z - Camera.main.transform.position.z;
-                    m_Character.CmdLookAt(Camera.main.ScreenToWorldPoint(mousePosition));
+                    // ToCameraPosition(m_ArcherCharacter.bowHolder);
+                    // Vector3 mousePosition = Input.mousePosition;
+                    // mousePosition.z = m_Character.transform.position.z - InputCamera.instance.transform.position.z;
+                    // m_Character.CmdLookAt(InputCamera.instance.ScreenToWorldPoint(mousePosition));
+                    m_Character.CmdLookAt(GetLook(m_ArcherCharacter.bowHolder));
                 }
 
                 if (Input.GetButtonDown("Fire1"))
@@ -66,9 +69,40 @@ namespace OpenJam2018
         void UpdateCharacter()
         {
             if (characterNetId != NetworkInstanceId.Invalid.Value)
+            {
                 m_Character = NetworkManagerHandler.FindLocalObject(new NetworkInstanceId(characterNetId)).GetComponent<Character>();
+                if (m_Character is ArcherCharacter)
+                    m_ArcherCharacter = m_Character as ArcherCharacter;
+            }
             else
+            {
                 m_Character = null;
+                m_ArcherCharacter = null;
+            }
+        }
+        static Vector3 GetLook(Transform character)
+        {
+            float rad = 45f * Mathf.Deg2Rad;
+            float cosA = Mathf.Cos(rad);
+            float sinA = Mathf.Sin(rad);
+
+            Vector3 crtWorldPos = character.position;
+            crtWorldPos.y += (cosA - 1) * character.position.y;
+            crtWorldPos.z += sinA * character.position.y;
+
+            Vector3 crtCameraPos = Camera.main.transform.InverseTransformPoint(crtWorldPos);
+            float z = crtCameraPos.z;
+
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = crtCameraPos.z;
+
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
+            Vector3 mosueCameraPos = Camera.main.transform.InverseTransformPoint(mouseWorldPos);
+            Vector3 d = mosueCameraPos - crtCameraPos;
+
+            d.x = Mathf.Max(1f, d.x);
+
+            return character.position + d;;
         }
     }
 }
