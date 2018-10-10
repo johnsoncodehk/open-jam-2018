@@ -22,14 +22,14 @@ namespace OpenJam2018
         {
             m_IgnoreLayer = ~((1 << LayerMask.NameToLayer("Character")) | (1 << LayerMask.NameToLayer("Hitbox")) | (1 << LayerMask.NameToLayer("Airbox")));
         }
-        void FixedUpdate()
+        void Update()
         {
             if (!m_Target)
             {
                 Destroy(gameObject);
                 return;
             }
-            if (Physics.Raycast(m_Target.transform.position + m_RaycastOffset, Vector3.down * 100, out var hit, Mathf.Infinity, m_IgnoreLayer))
+            if (Physics.Raycast(m_Target.transform.position + m_RaycastOffset, Vector3.down, out var hit, Mathf.Infinity, m_IgnoreLayer))
             {
                 // Debug.DrawRay(m_Target.transform.position + m_RaycastOffset, Vector3.down * hit.distance, Color.yellow);
                 m_GroundPositionY = hit.point.y;
