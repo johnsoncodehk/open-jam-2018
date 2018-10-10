@@ -44,6 +44,8 @@ namespace OpenJam2018
             m_Material = Instantiate(material);
             foreach (SpriteRenderer sprite in GetComponentsInChildren<SpriteRenderer>(true))
                 sprite.material = m_Material;
+
+            Shadow.AddTo(transform);
         }
         void Update()
         {

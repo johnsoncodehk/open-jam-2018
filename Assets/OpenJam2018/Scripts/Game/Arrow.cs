@@ -23,6 +23,8 @@ namespace OpenJam2018
             m_Collider = GetComponent<Collider>();
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
             m_SpriteRenderer.material = Instantiate(m_SpriteRenderer.material);
+
+            Shadow.AddTo(transform);
         }
         void Update()
         {
@@ -52,12 +54,13 @@ namespace OpenJam2018
 
             if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {
-                deadArrows.Add(this);
+                Destroy(gameObject);
+                // deadArrows.Add(this);
 
-                Destroy(m_Rigidbody);
-                Destroy(m_Collider);
-                enabled = false;
-                transform.SetParent(other.transform);
+                // Destroy(m_Rigidbody);
+                // Destroy(m_Collider);
+                // enabled = false;
+                // transform.SetParent(other.transform);
                 return;
             }
         }
