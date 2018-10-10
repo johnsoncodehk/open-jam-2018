@@ -9,14 +9,15 @@ namespace OpenJam2018
 
     public enum GameMode
     {
-        Local,
+        Normal,
         Online,
+        Infinite,
     }
     public class Game : NetworkBehaviour
     {
 
         public static Game instance;
-        public static GameMode mode = GameMode.Local;
+        public static GameMode mode = GameMode.Normal;
 
         public Character archer, swordsman, bossArcher, bossSwordsman;
         public BoxCollider playerSpawnArea;
@@ -33,18 +34,34 @@ namespace OpenJam2018
         int m_SwordsmanCount = 50;
         float m_ArcherPerTime = 0.5f;
         float m_SwordsmanPerTime = 0.2f;
+        float m_MaxDeltaTime = (1f / 60) / 0.9f;
 
         public override void OnStartServer()
         {
-            if (mode == GameMode.Local)
+            if (mode == GameMode.Normal)
             {
                 playerRemain = 5;
                 enemyRemain = 500;
             }
+            else if (mode == GameMode.Infinite)
+            {
+                playerRemain = 300;
+                enemyRemain = 100000;
+                m_SwordsmanCount = 10000;
+                m_ArcherCount = 2000;
+                m_SwordsmanPerTime = 0.01f;
+                m_ArcherPerTime = 0.05f;
+            }
             else
             {
-                playerRemain = 100;
-                enemyRemain = 5000;
+                // playerRemain = 100;
+                // enemyRemain = 5000;
+                playerRemain = 300;
+                enemyRemain = 100000;
+                m_SwordsmanCount = 10000;
+                m_ArcherCount = 2000;
+                m_SwordsmanPerTime = 0.01f;
+                m_ArcherPerTime = 0.05f;
             }
             UpdatePlayerRemain();
             UpdateEnemyRemain();
@@ -110,6 +127,9 @@ namespace OpenJam2018
                 if (Character.enemyBowTeam.Count > m_ArcherCount)
                     continue;
 
+                if (Time.deltaTime > m_MaxDeltaTime)
+                    continue;
+
                 CreateEnemy(archer, RandomPosition(bowSpawnAreas));
             }
         }
@@ -120,6 +140,9 @@ namespace OpenJam2018
                 yield return new WaitForSeconds(m_SwordsmanPerTime);
 
                 if (Character.enemyTeam.Count > m_SwordsmanCount)
+                    continue;
+
+                if (Time.deltaTime > m_MaxDeltaTime)
                     continue;
 
                 CreateEnemy(swordsman, RandomPosition(groundSpawnAreas));
@@ -166,13 +189,15 @@ namespace OpenJam2018
             enemyRemain = remain;
             UpdateEnemyRemain();
         }
-        void UpdatePlayerRemain()
+        public void UpdatePlayerRemain()
         {
-            playerRemainText.text = playerRemain.ToString();
+            if (!playerRemainText) return;
+            playerRemainText.text = playerRemain + " >> " + Character.playerTeam.Count;
         }
-        void UpdateEnemyRemain()
+        public void UpdateEnemyRemain()
         {
-            enemyRemainText.text = enemyRemain.ToString();
+            if (!enemyRemainText) return;
+            enemyRemainText.text = (Character.enemyTeam.Count + Character.enemyBowTeam.Count) + " << " + enemyRemain;
         }
     }
 }

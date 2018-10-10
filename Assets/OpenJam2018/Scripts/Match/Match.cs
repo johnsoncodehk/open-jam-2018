@@ -25,7 +25,12 @@ namespace OpenJam2018
 
         public void LocalHost()
         {
-            Game.mode = GameMode.Local;
+            Game.mode = GameMode.Normal;
+            NetworkManagerHandler.instance.StartHost();
+        }
+        public void InfiniteMode()
+        {
+            Game.mode = GameMode.Infinite;
             NetworkManagerHandler.instance.StartHost();
         }
         public void SearchGame()

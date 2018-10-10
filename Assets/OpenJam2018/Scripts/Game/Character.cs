@@ -89,12 +89,22 @@ namespace OpenJam2018
         void OnDestroy()
         {
             if (team == GameTeam.Enemy)
+            {
                 if (this is ArcherCharacter)
                     enemyBowTeam.Remove(this);
                 else
                     enemyTeam.Remove(this);
+
+                if (Game.instance)
+                    Game.instance.UpdateEnemyRemain();
+            }
             else
+            {
                 playerTeam.Remove(this);
+
+                if (Game.instance)
+                    Game.instance.UpdatePlayerRemain();
+            }
 
             if (Game.instance)
                 Game.instance.CheckGameOver();
@@ -191,9 +201,13 @@ namespace OpenJam2018
                     enemyBowTeam.Add(this);
                 else
                     enemyTeam.Add(this);
+                Game.instance.UpdateEnemyRemain();
             }
             else
+            {
                 playerTeam.Add(this);
+                Game.instance.UpdatePlayerRemain();
+            }
         }
         public override void OnStartServer()
         {
