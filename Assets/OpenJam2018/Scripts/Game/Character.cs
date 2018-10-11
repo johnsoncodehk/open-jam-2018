@@ -24,7 +24,7 @@ namespace OpenJam2018
         public event System.Action onDead;
         public float attackRecovery = 0.5f;
 
-        Vector3 m_MoveRaw;
+        [SyncVar] Vector3 m_MoveRaw;
         Rigidbody m_Rigidbody;
         CharacterController m_Controller;
         Animator m_Animator;
