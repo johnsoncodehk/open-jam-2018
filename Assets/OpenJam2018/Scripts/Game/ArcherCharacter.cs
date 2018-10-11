@@ -55,5 +55,9 @@ namespace OpenJam2018
                 yield return new WaitForSeconds(attackRecovery);
             }
         }
+        protected override float GetTargetDistance(Vector3 targetPosition)
+        {
+            return Mathf.Abs(transform.position.z - targetPosition.z);
+        }
     }
 }

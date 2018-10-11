@@ -121,7 +121,7 @@ namespace OpenJam2018
         {
             while (true)
             {
-                yield return new WaitForSeconds(Random.Range(0.05f, 0.2f));
+                yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
 
                 Vector3 offset = new Vector3(0.4f, 0, 0);
                 var (target, distance) = FindNearPlayer(offset);
@@ -151,11 +151,11 @@ namespace OpenJam2018
                 return (null, 0);
 
             Character nearC = players[0];
-            float nearD = Vector3.Distance(transform.position, nearC.transform.position + offset);
+            float nearD = GetTargetDistance(nearC.transform.position + offset);
             for (int i = 1; i < players.Count; i++)
             {
                 Character c = players[i];
-                float d = Vector3.Distance(transform.position, c.transform.position + offset);
+                float d = GetTargetDistance(c.transform.position + offset);
                 if (d < nearD)
                 {
                     nearC = c;
@@ -163,6 +163,10 @@ namespace OpenJam2018
                 }
             }
             return (nearC, nearD);
+        }
+        protected virtual float GetTargetDistance(Vector3 targetPosition)
+        {
+            return Vector3.Distance(transform.position, targetPosition);
         }
         protected bool MoveTo(Vector3 position)
         {
