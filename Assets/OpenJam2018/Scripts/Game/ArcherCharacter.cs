@@ -6,6 +6,9 @@ namespace OpenJam2018
 {
     public class ArcherCharacter : Character
     {
+
+        static float lastAttackAudioTime;
+
         public Arrow arrow;
         public Transform bowHolder;
         public float arrowSpeed = 20;
@@ -22,7 +25,11 @@ namespace OpenJam2018
             arrow.hitForce = hitForce;
             arrow.Spawn(team == GameTeam.Player ? arrowSpeed : Random.Range(0, arrowSpeed));
 
-            m_AttackAudio.Play();
+            if (Time.time - lastAttackAudioTime > 0.05f)
+            {
+                lastAttackAudioTime = Time.time;
+                m_AttackAudio.Play();
+            }
         }
         public override void OnAttack()
         { }
