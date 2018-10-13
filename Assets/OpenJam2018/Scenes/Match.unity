@@ -988,7 +988,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Create Game (Infinite)
+  m_Text: 'Create Game
+
+    (King Mode)'
 --- !u!222 &289496064
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3921,8 +3923,8 @@ MonoBehaviour:
   - {fileID: 335564917368398663, guid: 60f49d591787c4ede9e3d7b4c3f41c8a, type: 3}
   - {fileID: 2533288543843384974, guid: 4296fad9d7cf6423b89ee42115d293b0, type: 3}
   - {fileID: 8557651229440691980, guid: 85b71c01a52ac420eba33fc10d228640, type: 3}
-  - {fileID: 5610516208779803718, guid: 52a243d3677c144c7a4eaa0a358a343a, type: 3}
-  - {fileID: 6677422543272889035, guid: d4222ef3fda544da0a6ada98a92ef2c0, type: 3}
+  - {fileID: 6781302883272490775, guid: 52a243d3677c144c7a4eaa0a358a343a, type: 3}
+  - {fileID: 8594210567614436826, guid: d4222ef3fda544da0a6ada98a92ef2c0, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -4780,7 +4782,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Auto (Server)
+  m_Text: Auto Server
 --- !u!222 &1959108659
 CanvasRenderer:
   m_ObjectHideFlags: 0

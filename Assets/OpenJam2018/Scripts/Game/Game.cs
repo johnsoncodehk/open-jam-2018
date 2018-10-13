@@ -54,17 +54,12 @@ namespace OpenJam2018
             }
             else
             {
-                // playerRemain = 100;
-                // enemyRemain = 5000;
-                playerRemain = 300;
-                enemyRemain = 100000;
-                m_SwordsmanCount = 10000;
-                m_ArcherCount = 2000;
-                m_SwordsmanPerTime = 0.01f;
-                m_ArcherPerTime = 0.05f;
+                playerRemain = 100;
+                enemyRemain = 5000;
+
+                CreateEnemy(bossArcher, RandomPosition(bowSpawnAreas));
+                CreateEnemy(bossSwordsman, RandomPosition(bowSpawnAreas));
             }
-            UpdatePlayerRemain();
-            UpdateEnemyRemain();
 
             StartCoroutine(StartSpawnArcher());
             StartCoroutine(StartSpawnSwordsman());
