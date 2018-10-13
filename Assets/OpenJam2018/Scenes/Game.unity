@@ -2957,9 +2957,9 @@ MonoBehaviour:
   archer: {fileID: 3824681474123249007, guid: 85b71c01a52ac420eba33fc10d228640, type: 3}
   swordsman: {fileID: 4409052259358397838, guid: 4296fad9d7cf6423b89ee42115d293b0,
     type: 3}
-  bossArcher: {fileID: 3789173258374115257, guid: d4222ef3fda544da0a6ada98a92ef2c0,
+  bossArcher: {fileID: 8353313614828058390, guid: d4222ef3fda544da0a6ada98a92ef2c0,
     type: 3}
-  bossSwordsman: {fileID: 4612831857009021975, guid: 52a243d3677c144c7a4eaa0a358a343a,
+  bossSwordsman: {fileID: 2525383155405003862, guid: 52a243d3677c144c7a4eaa0a358a343a,
     type: 3}
   playerSpawnArea: {fileID: 561888913}
   groundSpawnAreas:

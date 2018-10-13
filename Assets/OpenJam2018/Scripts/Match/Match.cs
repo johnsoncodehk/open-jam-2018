@@ -34,6 +34,11 @@ namespace OpenJam2018
             Game.mode = GameMode.Infinite;
             NetworkManagerHandler.instance.StartHost();
         }
+        public void KingMode()
+        {
+            Game.mode = GameMode.King;
+            NetworkManagerHandler.instance.StartHost();
+        }
         public void SearchGame()
         {
             SearchGame("eu1-mm.unet.unity3d.com", "Europe", () =>

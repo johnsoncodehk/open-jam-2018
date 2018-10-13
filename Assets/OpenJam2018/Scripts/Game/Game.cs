@@ -12,6 +12,7 @@ namespace OpenJam2018
         Normal,
         Online,
         Infinite,
+        King,
     }
     public class Game : NetworkBehaviour
     {
@@ -51,6 +52,14 @@ namespace OpenJam2018
                 m_ArcherCount = 2000;
                 m_SwordsmanPerTime = 0.01f;
                 m_ArcherPerTime = 0.05f;
+            }
+            else if (mode == GameMode.King)
+            {
+                playerRemain = 10;
+                enemyRemain = 100;
+
+                CreateEnemy(bossArcher, RandomPosition(bowSpawnAreas));
+                CreateEnemy(bossSwordsman, RandomPosition(bowSpawnAreas));
             }
             else
             {
