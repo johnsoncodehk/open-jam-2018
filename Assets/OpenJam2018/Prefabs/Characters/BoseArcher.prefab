@@ -65,7 +65,7 @@ PrefabInstance:
     - target: {fileID: 335564917368398663, guid: 60f49d591787c4ede9e3d7b4c3f41c8a,
         type: 3}
       propertyPath: m_Name
-      value: Archer Variant
+      value: BoseArcher
       objectReference: {fileID: 0}
     - target: {fileID: 335564917368398632, guid: 60f49d591787c4ede9e3d7b4c3f41c8a,
         type: 3}
@@ -176,6 +176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: arrowSpeed
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 411160849583732661, guid: 60f49d591787c4ede9e3d7b4c3f41c8a,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60f49d591787c4ede9e3d7b4c3f41c8a, type: 3}
