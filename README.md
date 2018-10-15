@@ -52,7 +52,7 @@ The number of enemies appearing in infinite mode depends on the performance of t
   - Archers give priority to enemies in Z-axis position
   - Fix characters movement have not sync on join online mode
   - Fix arrow audio SPAM in Infinite mode
-- v1.0.4 (Web Play)
+- v1.0.4 ([Web Play](https://johnsoncodehk.github.io/open-jam-2018/))
   - Fix attack audio pitch change by attack times
   - Reduce enemy attack audio volume
   - Allow player arrow audio SPAM
