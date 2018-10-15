@@ -5,7 +5,6 @@
 A Spamming mini Online Game! (Maximum 20 players)
 
 Project Page: https://johnsoncodehk.itch.io/saber-and-archer
-[Play with GitHub Pages](https://johnsoncodehk.github.io/open-jam-2018/)
 
 Controls:
 
@@ -17,3 +16,9 @@ Credits:
 
 - Johnson Chu (Program, Game Design)
 - H2SO4 (Art)
+
+## License
+
+Copyright (c) 2018 johnsoncodehk
+
+Licensed under the [MIT](LICENSE) License.
