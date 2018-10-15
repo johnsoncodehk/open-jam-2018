@@ -80,3 +80,5 @@ The number of enemies appearing in infinite mode depends on the performance of t
 Copyright (c) 2018 johnsoncodehk
 
 Licensed under the [MIT](LICENSE) License.
+
+[All assets are licenced under the CC license](https://creativecommons.org/licenses/by/4.0/)
